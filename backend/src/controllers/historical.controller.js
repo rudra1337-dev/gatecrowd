@@ -98,3 +98,43 @@ export const getAllHistorical = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Bulk upload for admin
+
+export const bulkUploadHistorical = async (req, res) => {
+    try {
+        const records = req.body;
+
+        if (!Array.isArray(records) || records.length === 0) {
+            return res.status(400).json({
+                message: "Request body must be a non-empty array"
+            });
+        }
+
+        // insertMany allows bulk insert
+        const result = await Historical.insertMany(records, {
+            ordered: false // continues even if some fail (duplicate etc.)
+        });
+
+        res.status(201).json({
+            message: "Historical data uploaded",
+            inserted: result.length
+        });
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};

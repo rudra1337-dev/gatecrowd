@@ -40,6 +40,9 @@ export const calculateCurrentCrowd = async (gateId) => {
             ) / feedbacks.length;
 
         [level, range] = scoreToLevel(avgScore);
+
+
+
     } else {
         const olderFeedback = await Feedback.findOne({
             gateId,
@@ -51,18 +54,44 @@ export const calculateCurrentCrowd = async (gateId) => {
                 weekday: "long"
             });
 
-            const historical = await Historical.findOne({
-                gateId,
-                dayOfWeek: day
-            });
+            // const historical = await Historical.findOne({
+            //     gateId,
+            //     dayOfWeek: day
+            // });
 
-            if (historical) {
-                level = historical.crowdLevel;
-                range = historical.peopleRange;
+            // if (historical) {
+            //     level = historical.crowdLevel;
+            //     range = historical.peopleRange;
+            // } else {
+            //     level = "MODERATE";
+            //     range = "31-60";
+            // }
+
+
+
+            const slot = getCurrentTimeSlot();
+
+            if (!slot) {
+                level = "LOW";
+                range = "0-30";
             } else {
-                level = "MODERATE";
-                range = "31-60";
+                const historical = await Historical.findOne({
+                    gateId,
+                    dayOfWeek: day,
+                    timeSlot: slot
+                });
+
+                if (historical) {
+                    level = historical.crowdLevel;
+                    range = historical.peopleRange;
+                } else {
+                    level = "MODERATE";
+                    range = "31-60";
+                }
             }
+
+
+
         } else {
             if (crowdCache[gateId]) {
                 return crowdCache[gateId];
@@ -99,23 +128,59 @@ export const calculateCurrentCrowd = async (gateId) => {
 
 
 
+const getCurrentTimeSlot = () => {
+    const now = new Date(
+        new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+    );
+
+    const hour = now.getHours();
+
+    if (hour >= 5 && hour < 9) return "05-09";
+    if (hour >= 9 && hour < 13) return "09-13";
+    if (hour >= 13 && hour < 17) return "13-17";
+    if (hour >= 17 && hour < 22) return "17-22";
+
+    return null;
+};
 
 
 
 
 
 
-
-
-
-let interval;
+let intervals = {};
 
 export const startLiveUpdates = (gateId) => {
-    interval = setInterval(() => {
+    if (intervals[gateId]) return; // 🚫 prevent duplicate
+
+    intervals[gateId] = setInterval(() => {
         calculateCurrentCrowd(gateId);
     }, 60000);
+
+    console.log("▶️ Live updates started for gate:", gateId);
 };
 
 export const stopLiveUpdates = () => {
-    clearInterval(interval);
+    Object.values(intervals).forEach(clearInterval);
+    intervals = {};
+    console.log("⏹️ Live updates stopped for all gates");
 };
+
+
+
+
+
+
+
+
+// let interval;
+
+// export const startLiveUpdates = (gateId) => {
+//     interval = setInterval(() => {
+//         calculateCurrentCrowd(gateId);
+//     }, 60000);
+// };
+
+// export const stopLiveUpdates = () => {
+//     clearInterval(interval);
+// };
