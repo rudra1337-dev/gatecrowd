@@ -4,6 +4,8 @@ import Badge from '../components/common/Badge';
 import CrowdHeatIndicator from '../components/common/CrowdHeatIndicator';
 import SkeletonCard from '../components/common/SkeletonCard';
 import { useCrowdContext } from '../context/CrowdContext';
+import SeoHead from '../seo/SeoHead';
+import { buildBreadcrumbSchema, buildProjectSchema } from '../seo/schema';
 
 function Home() {
   const navigate = useNavigate();
@@ -24,9 +26,17 @@ function Home() {
   }, []);
 
   const gateOverview = useMemo(() => gates.slice(0, 4), [gates]);
+  const breadcrumbSchema = useMemo(() => buildBreadcrumbSchema([{ name: 'Home', path: '/home' }]), []);
 
   return (
     <div className="container page-pad">
+      <SeoHead
+        title="Live Crowd Monitoring for Puri Jagannath Temple"
+        path="/home"
+        description="Track live gate crowd conditions, get fastest entry suggestions, and plan a smoother darshan experience with GateCrowd."
+        keywords="GateCrowd home, Jagannath Temple live crowd, temple gate queue status, darshan planning app"
+        structuredData={[breadcrumbSchema, buildProjectSchema()]}
+      />
       <section className="hero-section glass-panel rounded-4 p-4 p-md-5 mb-5">
         <h1 className="display-6 fw-bold mb-3">{greeting}, Welcome to GateCrowd 🛕</h1>
         <p className="lead mb-0">

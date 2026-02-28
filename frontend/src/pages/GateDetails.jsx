@@ -7,6 +7,8 @@ import CrowdHeatIndicator from '../components/common/CrowdHeatIndicator';
 import useCrowdSimulation from '../hooks/useCrowdSimulation';
 import { useCrowdContext } from '../context/CrowdContext';
 import { connect, disconnect, emit } from '../services/socketService';
+import SeoHead from '../seo/SeoHead';
+import { buildBreadcrumbSchema } from '../seo/schema';
 
 function GateDetails() {
   const { id } = useParams();
@@ -16,6 +18,29 @@ function GateDetails() {
   const initialCrowd = gate?.crowdLevel || 45;
   const initialRange = gate?.peopleRange || '31-60';
   const { crowdLevel, crowdRange, history } = useCrowdSimulation(gate?.id, initialCrowd, initialRange, 10000);
+  const breadcrumbSchema = useMemo(
+    () =>
+      buildBreadcrumbSchema([
+        { name: 'Home', path: '/home' },
+        { name: 'Gates', path: '/gates' },
+        { name: gate?.name || 'Gate Details', path: `/gates/${id}` }
+      ]),
+    [gate?.name, id]
+  );
+  const gateSchema = useMemo(
+    () =>
+      gate
+        ? {
+            '@context': 'https://schema.org',
+            '@type': 'Place',
+            name: gate.name,
+            description: gate.description,
+            image: gate.image,
+            url: `https://gatecrowd.vercel.app/gates/${gate.id}`
+          }
+        : null,
+    [gate]
+  );
 
   useEffect(() => {
     connect();
@@ -43,6 +68,19 @@ function GateDetails() {
 
   return (
     <div className="container page-pad">
+      <SeoHead
+        title={gate ? `${gate.name} Live Crowd Details` : 'Gate Details'}
+        path={`/gates/${id}`}
+        description={
+          gate
+            ? `${gate.name} live people range, crowd trend graph, busy hours, and entry guidance at Puri Jagannath Temple.`
+            : 'Live gate details and crowd insights for Puri Jagannath Temple.'
+        }
+        keywords="gate crowd details, people range trend, jagannath temple gate analytics"
+        image={gate?.image}
+        noIndex={!gate}
+        structuredData={gateSchema ? [breadcrumbSchema, gateSchema] : [breadcrumbSchema]}
+      />
       <section className="mb-4">
         <img src={gate.image} alt={`${gate.name} detailed view`} className="img-fluid rounded-4 shadow-sm w-100 details-hero" />
       </section>

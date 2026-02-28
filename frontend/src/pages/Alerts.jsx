@@ -3,6 +3,8 @@ import Badge from '../components/common/Badge';
 import { useCrowdContext } from '../context/CrowdContext';
 import { getAlertsFromGates } from '../services/alertService';
 import { connect, disconnect, subscribe } from '../services/socketService';
+import SeoHead from '../seo/SeoHead';
+import { buildBreadcrumbSchema } from '../seo/schema';
 
 function priorityTone(priority) {
   if (priority === 'High') {
@@ -27,6 +29,14 @@ function priorityCardClass(priority) {
 function Alerts() {
   const { gates } = useCrowdContext();
   const [tick, setTick] = useState(0);
+  const breadcrumbSchema = useMemo(
+    () =>
+      buildBreadcrumbSchema([
+        { name: 'Home', path: '/home' },
+        { name: 'Alerts', path: '/alerts' }
+      ]),
+    []
+  );
 
   useEffect(() => {
     connect();
@@ -51,9 +61,30 @@ function Alerts() {
     }
     return getAlertsFromGates(gates);
   }, [gates, tick]);
+  const alertsSchema = useMemo(
+    () => ({
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'GateCrowd Live Alerts',
+      itemListElement: alerts.map((alert, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: `${alert.gateName} - ${alert.priority} Priority`,
+        description: alert.message
+      }))
+    }),
+    [alerts]
+  );
 
   return (
     <div className="container page-pad">
+      <SeoHead
+        title="Live Crowd Alerts and Recommendations"
+        path="/alerts"
+        description="View live crowd warnings, congestion alerts, and smart gate recommendations for a safer temple visit."
+        keywords="live crowd alerts, gate congestion, temple safety alerts, best time to visit Jagannath temple"
+        structuredData={[breadcrumbSchema, alertsSchema]}
+      />
       <section className="mb-4">
         <h1 className="h2">Live Alerts</h1>
         <p className="text-muted mb-0">Extreme crowd warnings, congestion notices, and best-visit recommendations.</p>

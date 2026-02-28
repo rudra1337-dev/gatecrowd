@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "seo:sitemap": "node scripts/generate-sitemap.mjs",
+    "seo:prerender": "node scripts/prerender-routes.mjs",
+    "postbuild": "npm run seo:sitemap && npm run seo:prerender"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",

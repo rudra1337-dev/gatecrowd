@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { API_BASE_URL } from '../services/gateService';
 import { useCrowdContext } from '../context/CrowdContext';
+import SeoHead from '../seo/SeoHead';
+import { buildBreadcrumbSchema, buildProjectSchema } from '../seo/schema';
 
 const TOTAL_VISITORS_KEY = 'gatecrowd_total_visitors';
 const FIRST_VISIT_KEY = 'gatecrowd_first_visit_registered';
@@ -40,6 +42,14 @@ function About() {
   const liveTempleVisitors = useMemo(
     () => gates.reduce((sum, gate) => sum + (Number(gate.crowdLevel) || 0), 0),
     [gates]
+  );
+  const breadcrumbSchema = useMemo(
+    () =>
+      buildBreadcrumbSchema([
+        { name: 'Home', path: '/home' },
+        { name: 'About', path: '/about' }
+      ]),
+    []
   );
 
   useEffect(() => {
@@ -97,6 +107,13 @@ function About() {
 
   return (
     <div className="container page-pad">
+      <SeoHead
+        title="About GateCrowd Frontend Architecture"
+        path="/about"
+        description="Learn the GateCrowd frontend architecture, backend integration, visitor tracking, and scalability approach."
+        keywords="GateCrowd architecture, react vite seo project, temple crowd monitoring system"
+        structuredData={[breadcrumbSchema, buildProjectSchema()]}
+      />
       <section className="glass-panel rounded-4 p-4 p-md-5 mb-4">
         <h1 className="h2 mb-3">About GateCrowd</h1>
         <p>

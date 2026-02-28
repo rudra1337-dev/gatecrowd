@@ -1,13 +1,45 @@
+import { useMemo } from 'react';
 import { useCrowdContext } from '../context/CrowdContext';
 import GateCard from '../components/gates/GateCard';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import SkeletonCard from '../components/common/SkeletonCard';
+import SeoHead from '../seo/SeoHead';
+import { buildBreadcrumbSchema } from '../seo/schema';
 
 function Gates() {
   const { gates, loading, error, refreshGates, bestGate } = useCrowdContext();
+  const breadcrumbSchema = useMemo(
+    () =>
+      buildBreadcrumbSchema([
+        { name: 'Home', path: '/home' },
+        { name: 'Gates', path: '/gates' }
+      ]),
+    []
+  );
+  const gatesSchema = useMemo(
+    () => ({
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'GateCrowd Temple Gates',
+      itemListElement: gates.map((gate, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: gate.name,
+        url: `https://gatecrowd.vercel.app/gates/${gate.id}`
+      }))
+    }),
+    [gates]
+  );
 
   return (
     <div className="container page-pad">
+      <SeoHead
+        title="Temple Gates Live Status"
+        path="/gates"
+        description="Compare all Jagannath Temple gates with live crowd ranges, identify the best gate, and avoid congestion."
+        keywords="Jagannath Temple gates, live crowd gates, best gate to enter, gate queue comparison"
+        structuredData={[breadcrumbSchema, gatesSchema]}
+      />
       <section className="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h1 className="h2 mb-1">Temple Gates Live Status</h1>
