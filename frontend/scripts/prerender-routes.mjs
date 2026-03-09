@@ -5,6 +5,11 @@ const DIST_DIR = path.resolve('dist');
 const BACKEND_URL = 'https://gatecrowd-backend.onrender.com';
 
 const routeMeta = {
+  '/': {
+    title: 'Jagannath Temple Puri Crowd Today – Live Darshan Waiting Time & Gate Status | GateCrowd',
+    description:
+      'Check Jagannath Temple Puri crowd today with real-time gate congestion updates and darshan waiting times. Plan your visit efficiently and avoid long queues.'
+  },
   '/home': {
     title: 'Live Crowd Monitoring for Puri Jagannath Temple | GateCrowd',
     description:
@@ -25,6 +30,9 @@ const routeMeta = {
 };
 
 function routeToPath(route) {
+  if (route === '/') {
+    return '';
+  }
   return route === '/home' ? 'home' : route.replace(/^\//, '');
 }
 
@@ -66,7 +74,7 @@ async function getDynamicGateRoutes() {
 async function writeRouteSnapshot(baseHtml, route, title, description) {
   const dirName = routeToPath(route);
   const outputDir = path.join(DIST_DIR, dirName);
-  const outputPath = path.join(outputDir, 'index.html');
+  const outputPath = dirName ? path.join(outputDir, 'index.html') : path.join(DIST_DIR, 'index.html');
 
   await fs.mkdir(outputDir, { recursive: true });
   const html = applyMeta(baseHtml, route, title, description);

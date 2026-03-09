@@ -23,7 +23,7 @@ async function getGateRoutes() {
 }
 
 async function generateSitemap() {
-  const staticRoutes = ['/home', '/gates', '/alerts', '/about'];
+  const staticRoutes = ['/', '/home', '/gates', '/alerts', '/about'];
   const dynamicGateRoutes = await getGateRoutes();
   const allRoutes = [...new Set([...staticRoutes, ...dynamicGateRoutes])];
   const today = new Date().toISOString();
@@ -35,8 +35,8 @@ ${allRoutes
     (route) => `  <url>
     <loc>${SITE_URL}${route}</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>${route === '/home' ? 'daily' : 'hourly'}</changefreq>
-    <priority>${route === '/home' ? '1.0' : '0.8'}</priority>
+    <changefreq>${route === '/' || route === '/home' ? 'daily' : 'hourly'}</changefreq>
+    <priority>${route === '/' || route === '/home' ? '1.0' : '0.8'}</priority>
   </url>`
   )
   .join('\n')}
