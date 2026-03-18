@@ -26,13 +26,13 @@ export const calculateCurrentCrowd = async (gateId) => {
 
     let level, range;
 
-    // 1) Most recent window (last 15 minutes) aggregated to avoid single spam
+    // 1) Most recent window (last 15 minutes) aggregated (max 10) to avoid single spam
     const recentFeedbacks = await Feedback.find({
         gateId,
         createdAt: { $gte: fifteenMinAgo }
     })
         .sort({ createdAt: -1 })
-        .limit(50);
+        .limit(10);
 
     if (recentFeedbacks.length > 0) {
         const avgScore =
