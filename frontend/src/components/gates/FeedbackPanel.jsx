@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getLastFeedbackTimestamp, submitFeedback } from '../../services/feedbackService';
 
-const WAIT_TIME_MS = 10 * 60 * 1000;
+// Cooldown set to 1 minute
+const WAIT_TIME_MS = 60 * 1000;
 
 const options = [
   { value: 'LOW', label: 'LOW (0-30)', tone: 'success' },
@@ -33,9 +34,8 @@ function FeedbackPanel({ gateId }) {
   const canSubmit = remainingMs === 0;
 
   const countdown = useMemo(() => {
-    if (remainingMs === 0) {
-      return 'You can submit feedback now.';
-    }
+    if (WAIT_TIME_MS === 0) return 'Cooldown is off for testing.';
+    if (remainingMs === 0) return 'You can submit feedback now.';
     const mins = Math.floor(remainingMs / 60000);
     const secs = Math.floor((remainingMs % 60000) / 1000);
     return `Please wait ${mins}m ${secs}s before next feedback.`;

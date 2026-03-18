@@ -1,4 +1,4 @@
-import { API_BASE_URL } from './gateService';
+import { http } from './httpClient';
 
 const STORAGE_KEY = 'gatecrowd_feedback_submissions';
 
@@ -35,30 +35,11 @@ export function getLastFeedbackTimestamp(gateId) {
 export async function submitFeedback({ gateId, levelLabel }) {
   const mapped = labelToPayload[levelLabel] || labelToPayload.MODERATE;
 
-  const response = await fetch(`${API_BASE_URL}/api/feedback`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      gateId,
-      crowdLevel: mapped.crowdLevel,
-      peopleRange: mapped.peopleRange
-    })
+  const response = await http.post('/api/feedback', {
+    gateId,
+    crowdLevel: mapped.crowdLevel,
+    peopleRange: mapped.peopleRange
   });
-
-  if (!response.ok) {
-    let message = `Failed to submit feedback (${response.status})`;
-    try {
-      const data = await response.json();
-      if (data?.message) {
-        message = data.message;
-      }
-    } catch {
-      // Keep fallback message.
-    }
-    throw new Error(message);
-  }
 
   const allFeedback = readFeedback();
   allFeedback[gateId] = {
@@ -67,5 +48,5 @@ export async function submitFeedback({ gateId, levelLabel }) {
   };
   writeFeedback(allFeedback);
 
-  return response.json();
+  return response.data;
 }

@@ -6,7 +6,7 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 import CrowdHeatIndicator from '../components/common/CrowdHeatIndicator';
 import useCrowdSimulation from '../hooks/useCrowdSimulation';
 import { useCrowdContext } from '../context/CrowdContext';
-import { connect, disconnect, emit } from '../services/socketService';
+import { connect, disconnect, emit, subscribe } from '../services/socketService';
 import SeoHead from '../seo/SeoHead';
 import { buildBreadcrumbSchema } from '../seo/schema';
 
@@ -17,7 +17,7 @@ function GateDetails() {
   const gate = useMemo(() => gates.find((item) => item.id === id), [gates, id]);
   const initialCrowd = gate?.crowdLevel || 45;
   const initialRange = gate?.peopleRange || '31-60';
-  const { crowdLevel, crowdRange, history } = useCrowdSimulation(gate?.id, initialCrowd, initialRange, 10000);
+  const { crowdLevel, crowdRange, history } = useCrowdSimulation(gate?.id, initialCrowd, initialRange, 1000);
   const breadcrumbSchema = useMemo(
     () =>
       buildBreadcrumbSchema([
@@ -44,12 +44,23 @@ function GateDetails() {
 
   useEffect(() => {
     connect();
-    return () => disconnect();
-  }, []);
+    const unsubscribe = subscribe('gate:crowd:update', (payload) => {
+      if (payload?.gateId === id && payload?.crowdLevel) {
+        // sync simulation hook with live value from backend
+        const parsedLevel = Number(payload.crowdLevel) || crowdLevel;
+        const parsedRange = payload.peopleRange || crowdRange;
+        emit('crowd:local:update', { level: parsedLevel, range: parsedRange });
+      }
+    });
 
-  useEffect(() => {
-    emit('gate:crowd:update', { gateId: id, crowdLevel });
-  }, [id, crowdLevel]);
+    emit('gate:subscribe', { gateId: id });
+
+    return () => {
+      emit('gate:unsubscribe', { gateId: id });
+      unsubscribe();
+      disconnect();
+    };
+  }, [id, crowdLevel, crowdRange]);
 
   if (loading) {
     return <LoadingSpinner message="Loading gate details..." />;

@@ -2,31 +2,55 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://gatecrowd.vercel.app/</loc>
-    <lastmod>2026-03-09T19:20:28.187Z</lastmod>
+    <lastmod>2026-03-18T09:51:49.540Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://gatecrowd.vercel.app/home</loc>
-    <lastmod>2026-03-09T19:20:28.187Z</lastmod>
+    <lastmod>2026-03-18T09:51:49.540Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://gatecrowd.vercel.app/gates</loc>
-    <lastmod>2026-03-09T19:20:28.187Z</lastmod>
+    <lastmod>2026-03-18T09:51:49.540Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://gatecrowd.vercel.app/alerts</loc>
-    <lastmod>2026-03-09T19:20:28.187Z</lastmod>
+    <lastmod>2026-03-18T09:51:49.540Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://gatecrowd.vercel.app/about</loc>
-    <lastmod>2026-03-09T19:20:28.187Z</lastmod>
+    <lastmod>2026-03-18T09:51:49.540Z</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gatecrowd.vercel.app/gates/697ca74562e6a80637b9cedf</loc>
+    <lastmod>2026-03-18T09:51:49.540Z</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gatecrowd.vercel.app/gates/697ca88262e6a80637b9cee1</loc>
+    <lastmod>2026-03-18T09:51:49.540Z</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gatecrowd.vercel.app/gates/697ca9dd62e6a80637b9cee3</loc>
+    <lastmod>2026-03-18T09:51:49.540Z</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gatecrowd.vercel.app/gates/697cacee62e6a80637b9cee5</loc>
+    <lastmod>2026-03-18T09:51:49.540Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>

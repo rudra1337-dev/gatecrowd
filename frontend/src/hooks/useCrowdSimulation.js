@@ -35,7 +35,7 @@ function createPoint(level, crowdLabel, peopleRange) {
   };
 }
 
-function useCrowdSimulation(gateId, initialValue = 45, initialRange = '31-60', intervalMs = 10000) {
+function useCrowdSimulation(gateId, initialValue = 45, initialRange = '31-60', intervalMs = 1000) {
   const mapped = mapValueToRange(initialValue);
   const [crowdLevel, setCrowdLevel] = useState(initialValue);
   const [crowdRange, setCrowdRange] = useState(initialRange);

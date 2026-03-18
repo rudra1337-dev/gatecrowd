@@ -1,80 +1,144 @@
-function CrowdChart({ history }) {
-  const yTicks = [
-    { label: 'EXTREME', score: 5 },
-    { label: 'VERY HIGH', score: 4 },
-    { label: 'HIGH', score: 3 },
-    { label: 'MODERATE', score: 2 },
-    { label: 'LOW', score: 1 }
-  ];
+import { useMemo, useState } from 'react';
+import { AgCharts } from 'ag-charts-react';
+import 'ag-charts-enterprise';
 
-  const points = history.map((point, index) => {
-    const x = history.length > 1 ? (index / (history.length - 1)) * 100 : 0;
-    const y = ((5 - point.score) / 4) * 100;
-    return { x, y, ...point };
+function rangeBounds(peopleRange = '31-60') {
+  if (peopleRange.includes('+')) {
+    const min = parseInt(peopleRange, 10);
+    return { min: Number.isFinite(min) ? min : 120, max: (Number.isFinite(min) ? min : 120) + 20 };
+  }
+  const [minRaw, maxRaw] = peopleRange.split('-').map((v) => parseInt(v, 10));
+  const min = Number.isFinite(minRaw) ? minRaw : 30;
+  const max = Number.isFinite(maxRaw) ? maxRaw : min + 20;
+  return { min, max };
+}
+
+function buildOHLC(history) {
+  const now = Date.now();
+  return history.map((point, index) => {
+    const { min, max } = rangeBounds(point.peopleRange);
+    const open = min;
+    const close = max;
+    const high = max + 2;
+    const low = Math.max(0, min - 2);
+    const timestamp = new Date(now - (history.length - 1 - index) * 60 * 1000);
+    return {
+      timestamp,
+      open,
+      close,
+      high,
+      low,
+      rangeLabel: point.peopleRange || '31-60',
+      timeLabel: point.time || timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
   });
+}
 
-  const linePath = points
-    .map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`)
-    .join(' ');
+function rangeColor(rangeLabel = '') {
+  if (rangeLabel.includes('0-30')) return '#22c55e'; // green
+  if (rangeLabel.includes('31-60')) return '#38bdf8'; // sky blue
+  if (rangeLabel.includes('61-90')) return '#fbbf24'; // light orange
+  if (rangeLabel.includes('91-120')) return '#f97316'; // orange
+  if (rangeLabel.includes('120')) return '#ef4444'; // red
+  return '#38bdf8';
+}
 
-  const areaPath = points.length
-    ? `${linePath} L ${points[points.length - 1].x.toFixed(2)} 100 L ${points[0].x.toFixed(2)} 100 Z`
-    : '';
+function CrowdChart({ history }) {
+  const [dragAction, setDragAction] = useState('hover');
 
-  const latest = points[points.length - 1];
+  const data = useMemo(() => buildOHLC(history), [history]);
+
+  const options = useMemo(
+    () => ({
+      data,
+      animation: { enabled: false },
+      touch: { dragAction },
+      zoom: {
+        enabled: true,
+        enableAxisDragging: false
+      },
+      series: [
+        {
+          type: 'candlestick',
+          xKey: 'timestamp',
+          xName: 'Time',
+          lowKey: 'low',
+          highKey: 'high',
+          openKey: 'open',
+          closeKey: 'close',
+          itemStyler: ({ datum }) => {
+            const color = rangeColor(datum.rangeLabel);
+            return {
+              stroke: color,
+              fill: color,
+              strokeWidth: 1.5
+            };
+          },
+          tooltip: {
+            renderer: ({ datum }) => ({
+              title: datum.timeLabel,
+              content: `${datum.rangeLabel} people`
+            })
+          }
+        }
+      ],
+      axes: [
+        {
+          type: 'ordinal-time',
+          position: 'bottom',
+          title: { text: 'Time' }
+        },
+        {
+          type: 'number',
+          position: 'left',
+          title: { text: 'People (range bounds)' }
+        }
+      ],
+      legend: { enabled: false },
+      background: {
+        fill: 'linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%)'
+      },
+      padding: { top: 10, right: 10, bottom: 40, left: 60 },
+      theme: {
+        overrides: {
+          cartesian: {
+            axes: {
+              number: {
+                gridStyle: [{ stroke: '#2f3b4a', lineDash: [4, 4] }]
+              },
+              category: {
+                gridStyle: [{ stroke: '#2f3b4a', lineDash: [4, 4] }]
+              }
+            }
+          }
+        }
+      },
+      interactions: { enabled: true }
+    }),
+    [data, dragAction]
+  );
 
   return (
     <section className="crowd-chart-wrapper glass-panel p-3 rounded-4" aria-label="Live crowd range over time chart">
       <div className="d-flex align-items-center justify-content-between mb-3">
         <h2 className="h5 mb-0">People Range vs Time</h2>
-        <small className="text-muted">Trading-style live graph</small>
-      </div>
-
-      <div className="trade-graph-wrap">
-        <svg viewBox="0 0 100 100" className="trade-graph" role="img" aria-label="Crowd range trading graph">
-          <defs>
-            <linearGradient id="tradeLineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#20b06f" />
-              <stop offset="50%" stopColor="#f3b644" />
-              <stop offset="100%" stopColor="#d23838" />
-            </linearGradient>
-            <linearGradient id="tradeAreaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#f3b644" stopOpacity="0.45" />
-              <stop offset="100%" stopColor="#f3b644" stopOpacity="0.03" />
-            </linearGradient>
-          </defs>
-
-          {yTicks.map((tick) => {
-            const y = ((5 - tick.score) / 4) * 100;
-            return <line key={tick.label} x1="0" y1={y} x2="100" y2={y} className="trade-grid-line" />;
-          })}
-
-          {[20, 40, 60, 80].map((x) => (
-            <line key={x} x1={x} y1="0" x2={x} y2="100" className="trade-grid-line vertical" />
+        <div className="d-flex gap-2 align-items-center">
+          <span className="small text-muted">Drag:</span>
+          {['none', 'drag', 'hover'].map((mode) => (
+            <button
+              key={mode}
+              type="button"
+              className={`btn btn-sm ${dragAction === mode ? 'btn-success' : 'btn-outline-secondary'}`}
+              onClick={() => setDragAction(mode)}
+            >
+              {mode}
+            </button>
           ))}
-
-          {areaPath && <path d={areaPath} className="trade-area" />}
-          <path d={linePath} className="trade-line" />
-
-          {latest && (
-            <>
-              <line x1={latest.x} y1="0" x2={latest.x} y2="100" className="trade-crosshair" />
-              <circle cx={latest.x} cy={latest.y} r="2" className="trade-point" />
-            </>
-          )}
-        </svg>
-
-        {latest && (
-          <div className="trade-price-tag" style={{ top: `${latest.y}%` }}>
-            {latest.peopleRange}
-          </div>
-        )}
+        </div>
       </div>
 
-      <div className="d-flex justify-content-between mt-3 small text-muted">
-        <span>{points[0]?.time || '--:--'}</span>
-        <span>{points[Math.floor(points.length / 2)]?.time || '--:--'}</span>
-        <span>{points[points.length - 1]?.time || '--:--'}</span>
+      <div className="trade-graph-wrap" style={{ height: 360 }}>
+        <AgCharts options={options} />
       </div>
     </section>
   );

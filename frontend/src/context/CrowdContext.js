@@ -1,5 +1,6 @@
 import { createContext, createElement, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { getGates } from '../services/gateService';
+import { connect, disconnect, subscribe } from '../services/socketService';
 
 const CrowdContext = createContext(null);
 
@@ -27,14 +28,35 @@ export function CrowdProvider({ children }) {
 
   useEffect(() => {
     fetchGates(true);
-  }, [fetchGates]);
+    connect();
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      fetchGates(false, true);
-    }, 30000);
+    const unsubscribeGates = subscribe('gates:update', (nextGates) => {
+      if (Array.isArray(nextGates)) {
+        setGates(nextGates);
+      }
+    });
 
-    return () => clearInterval(timer);
+    const unsubscribeCrowd = subscribe('gate:crowd:update', ({ gateId, crowdLevel, peopleRange }) => {
+      if (!gateId) return;
+      setGates((prev) =>
+        prev.map((gate) =>
+          gate.id === gateId || gate._id === gateId
+            ? {
+                ...gate,
+                crowdLevel: crowdLevel || gate.crowdLevel,
+                crowdLabel: crowdLevel || gate.crowdLabel,
+                peopleRange: peopleRange || gate.peopleRange
+              }
+            : gate
+        )
+      );
+    });
+
+    return () => {
+      unsubscribeGates();
+      unsubscribeCrowd();
+      disconnect();
+    };
   }, [fetchGates]);
 
   const value = useMemo(() => {

@@ -1,4 +1,6 @@
-const API_BASE_URL = 'https://gatecrowd-backend.onrender.com';
+import { API_BASE_URL } from './apiConfig';
+import { http } from './httpClient';
+
 const CACHE_KEY = 'gatecrowd_gate_cache_v2';
 const CACHE_TTL_MS = 1000 * 60 * 2;
 
@@ -36,26 +38,11 @@ const crowdRangeToValue = {
   '120+': 130
 };
 
-function buildUrl(path) {
-  return `${API_BASE_URL}${path}`;
+async function fetchJson(path) {
+  const response = await http.get(path);
+  return response.data;
 }
 
-async function fetchJson(path) {
-  const response = await fetch(buildUrl(path));
-  if (!response.ok) {
-    let message = `Request failed (${response.status})`;
-    try {
-      const data = await response.json();
-      if (data?.message) {
-        message = data.message;
-      }
-    } catch {
-      // Keep fallback message.
-    }
-    throw new Error(message);
-  }
-  return response.json();
-}
 
 function getMetadata(gateName = '') {
   const normalized = gateName.toLowerCase();
