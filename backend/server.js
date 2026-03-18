@@ -14,6 +14,7 @@ import {
     stopLiveUpdates
 } from "./src/services/crowdCalculator.js";
 import { GATE_IDS } from "./src/constants/gates.js";
+import { setIO } from "./src/utils/socket.js";
 
 dotenv.config();
 
@@ -53,6 +54,8 @@ export const io = new Server(server, {
         methods: ["GET", "POST"]
     }
 });
+
+setIO(io);
 
 // Track connected clients
 let connectedClients = 0;

@@ -1,5 +1,5 @@
 import Gate from "../models/gate.model.js";
-import { io } from "../../server.js";
+import { getIO } from "../utils/socket.js";
 
 
 
@@ -14,7 +14,7 @@ export const getAllGates = async (req, res) => {
         const gates = await Gate.find();
 
         // Emit gates via socket to all connected clients
-        io.emit("gates:update", gates);
+        getIO()?.emit("gates:update", gates);
 
         res.status(200).json(gates);
     } catch (err) {

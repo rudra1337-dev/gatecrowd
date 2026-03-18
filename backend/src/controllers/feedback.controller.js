@@ -8,6 +8,9 @@
 import mongoose from "mongoose";
 import Feedback from "../models/feedback.model.js";
 import Gate from "../models/gate.model.js";
+import { calculateCurrentCrowd } from "../services/crowdCalculator.js";
+import { crowdCache } from "../services/crowdCache.js";
+import { getIO } from "../utils/socket.js";
 
 const VALID_LEVELS = [
     "LOW",
@@ -80,6 +83,18 @@ export const submitFeedback = async (req, res) => {
             crowdLevel,
             peopleRange
         });
+
+        // 7️⃣ Recalculate current crowd and emit live update
+        const latestCrowd = await calculateCurrentCrowd(gateId);
+        crowdCache[gateId] = latestCrowd;
+        getIO()?.emit("gate:crowd:update", {
+            gateId,
+            ...latestCrowd
+        });
+
+        // Also refresh full gates list for listeners that rely on it
+        const gates = await Gate.find();
+        getIO()?.emit("gates:update", gates);
 
         res.status(201).json({
             message: "Thank you for your feedback 🙏",

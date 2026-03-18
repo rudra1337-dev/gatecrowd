@@ -1,6 +1,7 @@
 import Feedback from "../models/feedback.model.js";
 import Historical from "../models/historical.model.js";
 import { crowdCache } from "./crowdCache.js";
+import { getIO } from "../utils/socket.js";
 
 const levelScore = {
     LOW: 1,
@@ -20,54 +21,42 @@ const scoreToLevel = (score) => {
 
 export const calculateCurrentCrowd = async (gateId) => {
     const now = Date.now();
-    const tenMinAgo = new Date(now - 10 * 60 * 1000);
+    const fifteenMinAgo = new Date(now - 15 * 60 * 1000);
     const oneHourAgo = new Date(now - 60 * 60 * 1000);
-
-    const feedbacks = await Feedback.find({
-        gateId,
-        createdAt: { $gte: tenMinAgo }
-    })
-        .sort({ createdAt: -1 })
-        .limit(50);
 
     let level, range;
 
-    if (feedbacks.length > 0) {
-        const avgScore =
-            feedbacks.reduce(
-                (sum, f) => sum + levelScore[f.crowdLevel],
-                0
-            ) / feedbacks.length;
+    // 1) Most recent single feedback (fresh signal wins)
+    const latestRecent = await Feedback.findOne({
+        gateId,
+        createdAt: { $gte: fifteenMinAgo }
+    }).sort({ createdAt: -1 });
 
-        [level, range] = scoreToLevel(avgScore);
-
-
-
+    if (latestRecent) {
+        level = latestRecent.crowdLevel;
+        range = latestRecent.peopleRange;
     } else {
-        const olderFeedback = await Feedback.findOne({
+        // 2) Average last hour feedbacks if any
+        const lastHourFeedbacks = await Feedback.find({
             gateId,
             createdAt: { $gte: oneHourAgo }
-        });
+        })
+            .sort({ createdAt: -1 })
+            .limit(50);
 
-        if (!olderFeedback) {
+        if (lastHourFeedbacks.length > 0) {
+            const avgScore =
+                lastHourFeedbacks.reduce(
+                    (sum, f) => sum + levelScore[f.crowdLevel],
+                    0
+                ) / lastHourFeedbacks.length;
+
+            [level, range] = scoreToLevel(avgScore);
+        } else {
+            // 3) Historical fallback by day/time slot
             const day = new Date().toLocaleString("en-US", {
                 weekday: "long"
             });
-
-            // const historical = await Historical.findOne({
-            //     gateId,
-            //     dayOfWeek: day
-            // });
-
-            // if (historical) {
-            //     level = historical.crowdLevel;
-            //     range = historical.peopleRange;
-            // } else {
-            //     level = "MODERATE";
-            //     range = "31-60";
-            // }
-
-
 
             const slot = getCurrentTimeSlot();
 
@@ -89,40 +78,17 @@ export const calculateCurrentCrowd = async (gateId) => {
                     range = "31-60";
                 }
             }
-
-
-
-        } else {
-            if (crowdCache[gateId]) {
-                return crowdCache[gateId];
-            }
-
-            // fallback: calculate using last hour feedback
-            const lastHourFeedbacks = await Feedback.find({
-                gateId,
-                createdAt: { $gte: oneHourAgo }
-            }).limit(50);
-
-            if (lastHourFeedbacks.length > 0) {
-                const avgScore =
-                    lastHourFeedbacks.reduce(
-                        (sum, f) => sum + levelScore[f.crowdLevel],
-                        0
-                    ) / lastHourFeedbacks.length;
-
-                [level, range] = scoreToLevel(avgScore);
-            }
         }
-
     }
 
-    crowdCache[gateId] = {
+    const result = {
         crowdLevel: level,
         peopleRange: range,
         updatedAt: new Date()
     };
 
-    return crowdCache[gateId];
+    crowdCache[gateId] = result;
+    return result;
 };
 
 
@@ -153,8 +119,16 @@ let intervals = {};
 export const startLiveUpdates = (gateId) => {
     if (intervals[gateId]) return; // 🚫 prevent duplicate
 
+    const tick = async () => {
+        const snapshot = await calculateCurrentCrowd(gateId);
+        getIO()?.emit("gate:crowd:update", { gateId, ...snapshot });
+    };
+
+    // run once immediately for freshness
+    tick().catch((err) => console.error("live update error", err));
+
     intervals[gateId] = setInterval(() => {
-        calculateCurrentCrowd(gateId);
+        tick().catch((err) => console.error("live update error", err));
     }, 60000);
 
     console.log("▶️ Live updates started for gate:", gateId);
