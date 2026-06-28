@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import LoadingSpinner from './components/common/LoadingSpinner';
+import AIChatWidget from './components/AIChatWidget';
 import GlobalSeo from './seo/GlobalSeo';
 import styles from './styles/App.module.css';
 
@@ -55,6 +56,7 @@ function App() {
           </Routes>
         </Suspense>
       </main>
+      <AIChatWidget />
       <Footer />
     </div>
   );

@@ -1,0 +1,58 @@
+.inputBar {
+  min-height: var(--chat-input-height);
+  flex-shrink: 0;
+  padding: 10px 12px;
+  border-top: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.textarea {
+  max-height: 80px;
+  flex: 1;
+  resize: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 22px;
+  padding: 10px 16px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  outline: none;
+  overflow-y: auto;
+  transition: border-color 150ms ease;
+}
+
+.textarea:focus {
+  border-color: var(--gc-primary);
+  box-shadow: none;
+}
+
+.textarea:disabled {
+  background: #f9fafb;
+  cursor: not-allowed;
+}
+
+.sendBtn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--gc-primary);
+  font-weight: 800;
+  transition:
+    background 150ms ease,
+    transform 100ms ease;
+}
+
+.sendBtn:hover:not(:disabled) {
+  background: var(--gc-primary-dark);
+  transform: scale(1.05);
+}
+
+.sendBtn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.sendBtn:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}

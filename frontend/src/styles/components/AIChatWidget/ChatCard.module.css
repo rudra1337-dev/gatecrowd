@@ -1,0 +1,59 @@
+.card {
+  position: fixed;
+  right: 24px;
+  bottom: 96px;
+  z-index: 9999;
+  display: flex;
+  width: var(--chat-card-width);
+  height: var(--chat-card-height);
+  max-height: calc(100vh - 120px);
+  flex-direction: column;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  border-radius: var(--chat-card-radius);
+  box-shadow: var(--shadow-card);
+  transform-origin: bottom right;
+}
+
+.cardOpen {
+  animation: cardOpen var(--duration-open) var(--ease-spring) forwards;
+}
+
+.cardClose {
+  animation: cardClose var(--duration-close) var(--ease-in-fast) forwards;
+}
+
+@keyframes cardOpen {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes cardClose {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    width: calc(100vw - 32px);
+    height: 70vh;
+    max-height: 70vh;
+    transform-origin: bottom center;
+  }
+}

@@ -1,0 +1,58 @@
+.header {
+  height: var(--chat-header-height);
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--gc-primary-dark), var(--gc-primary));
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--gc-primary-dark);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.onlineDot {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--gc-accent);
+  box-shadow: 0 0 0 2px var(--gc-primary);
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.subtitle {
+  font-size: 0.72rem;
+  line-height: 1.2;
+  opacity: 0.8;
+}
+
+.closeBtn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  color: #ffffff;
+  background: transparent;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: background 150ms ease;
+}
+
+.closeBtn:hover,
+.closeBtn:focus-visible {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+}

@@ -1,0 +1,66 @@
+.wrapper {
+  justify-content: flex-start;
+  animation: fadeInUp 150ms ease;
+}
+
+.bubble {
+  min-width: 72px;
+  padding: 10px 14px;
+  border-radius: var(--bubble-radius-corner) var(--bubble-radius) var(--bubble-radius) var(--bubble-radius);
+  background: var(--bubble-ai-bg);
+}
+
+.dots {
+  height: 20px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #9ca3af;
+  animation: bounce 1.2s infinite ease-in-out;
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.thinkingText {
+  margin-top: 4px;
+  color: #9ca3af;
+  font-size: 0.68rem;
+  font-style: italic;
+}
+
+@keyframes bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+
+  30% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
