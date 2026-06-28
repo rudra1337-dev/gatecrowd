@@ -1,0 +1,39 @@
+.page {
+  padding-top: var(--gc-space-page-y);
+  padding-bottom: var(--gc-space-page-y);
+}
+
+.panel {
+  background: var(--gc-surface);
+  border: 1px solid var(--gc-border-soft);
+  box-shadow: var(--gc-shadow-panel);
+  backdrop-filter: blur(10px);
+}
+
+.card {
+  background: var(--gc-surface-solid);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+:root[data-theme='dark'] .card {
+  color: var(--gc-text);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--gc-shadow-hover) !important;
+}
+
+.gateImage {
+  height: 180px;
+  object-fit: cover;
+}
+
+.button3d {
+  box-shadow: 0 5px 0 var(--gc-primary-shadow);
+  transition: transform 0.2s ease;
+}
+
+.button3d:hover {
+  transform: translateY(-2px);
+}

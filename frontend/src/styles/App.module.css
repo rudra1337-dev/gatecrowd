@@ -1,0 +1,31 @@
+.shell {
+  position: relative;
+}
+
+.contentLayer {
+  position: relative;
+  z-index: 1;
+}
+
+.offlineBanner {
+  position: relative;
+  z-index: 1;
+  background: #ffe7b3;
+  color: #4b2f05;
+}
+
+.pageFade {
+  animation: fadeIn 0.32s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

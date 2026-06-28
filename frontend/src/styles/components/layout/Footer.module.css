@@ -1,0 +1,9 @@
+.footer {
+  position: relative;
+  z-index: 1;
+  background: rgba(23, 22, 19, 0.05);
+}
+
+:root[data-theme='dark'] .footer {
+  background: rgba(255, 255, 255, 0.04);
+}

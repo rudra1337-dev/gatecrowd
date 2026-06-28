@@ -1,0 +1,28 @@
+.badge {
+  font-size: 0.72rem;
+  padding: 0.32rem 0.55rem;
+  border-radius: var(--gc-radius-pill);
+  font-weight: 600;
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+.success {
+  background: #d2f4df;
+  color: #115d33;
+}
+
+.warning {
+  background: #ffeebf;
+  color: #6a4c00;
+}
+
+.danger {
+  background: #ffd8d8;
+  color: #7b1616;
+}
+
+.neutral {
+  background: #e8e8e8;
+  color: #4b4b4b;
+}

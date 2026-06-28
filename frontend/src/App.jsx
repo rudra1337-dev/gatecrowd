@@ -4,6 +4,7 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import LoadingSpinner from './components/common/LoadingSpinner';
 import GlobalSeo from './seo/GlobalSeo';
+import styles from './styles/App.module.css';
 
 const ThreeBackground = lazy(() => import('./components/common/ThreeBackground'));
 const Home = lazy(() => import('./pages/Home'));
@@ -30,18 +31,18 @@ function App() {
   }, []);
 
   return (
-    <div className="app-shell d-flex flex-column min-vh-100">
+    <div className={`${styles.shell} d-flex flex-column min-vh-100`}>
       <GlobalSeo />
       <Suspense fallback={null}>
         <ThreeBackground />
       </Suspense>
       <Navbar />
       {!isOnline && (
-        <div className="offline-banner text-center py-2" role="alert" aria-live="assertive">
+        <div className={`${styles.offlineBanner} text-center py-2`} role="alert" aria-live="assertive">
           You are offline. Showing cached data and simulated updates.
         </div>
       )}
-      <main key={location.pathname} className="page-fade flex-grow-1" aria-live="polite">
+      <main key={location.pathname} className={`${styles.contentLayer} ${styles.pageFade} flex-grow-1`} aria-live="polite">
         <Suspense fallback={<LoadingSpinner message="Loading page..." />}>
           <Routes>
             <Route path="/" element={<Navigate to="/home" replace />} />

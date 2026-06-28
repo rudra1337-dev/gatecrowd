@@ -1,0 +1,19 @@
+.page {
+  padding-top: var(--gc-space-page-y);
+  padding-bottom: var(--gc-space-page-y);
+}
+
+.panel {
+  background: var(--gc-surface);
+  border: 1px solid var(--gc-border-soft);
+  box-shadow: var(--gc-shadow-panel);
+  backdrop-filter: blur(10px);
+}
+
+.card {
+  background: var(--gc-surface-solid);
+}
+
+:root[data-theme='dark'] .card {
+  color: var(--gc-text);
+}

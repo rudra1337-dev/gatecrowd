@@ -3,6 +3,7 @@ import { API_BASE_URL } from '../services/apiConfig';
 import { useCrowdContext } from '../context/CrowdContext';
 import SeoHead from '../seo/SeoHead';
 import { buildBreadcrumbSchema, buildProjectSchema } from '../seo/schema';
+import styles from '../styles/pages/About.module.css';
 
 const TOTAL_VISITORS_KEY = 'gatecrowd_total_visitors';
 const FIRST_VISIT_KEY = 'gatecrowd_first_visit_registered';
@@ -106,7 +107,7 @@ function About() {
   }, []);
 
   return (
-    <div className="container page-pad">
+    <div className={`${styles.page} container`}>
       <SeoHead
         title="About GateCrowd Frontend Architecture"
         path="/about"
@@ -114,7 +115,7 @@ function About() {
         keywords="GateCrowd architecture, react vite seo project, temple crowd monitoring system"
         structuredData={[breadcrumbSchema, buildProjectSchema()]}
       />
-      <section className="glass-panel rounded-4 p-4 p-md-5 mb-4">
+      <section className={`${styles.panel} rounded-4 p-4 p-md-5 mb-4`}>
         <h1 className="h2 mb-3">About GateCrowd</h1>
         <p>
           GateCrowd addresses a real operational challenge at high-footfall pilgrimage destinations: visitors often lack
@@ -151,7 +152,7 @@ function About() {
 
       <section className="row g-3" aria-label="Visitor tracking stats">
         <div className="col-md-4">
-          <article className="card border-0 shadow-sm h-100">
+          <article className={`${styles.card} card border-0 shadow-sm h-100`}>
             <div className="card-body">
               <h2 className="h5">Current Site Visitors</h2>
               <p className="display-6 mb-0">{currentVisitors.toLocaleString()}</p>
@@ -160,7 +161,7 @@ function About() {
           </article>
         </div>
         <div className="col-md-4">
-          <article className="card border-0 shadow-sm h-100">
+          <article className={`${styles.card} card border-0 shadow-sm h-100`}>
             <div className="card-body">
               <h2 className="h5">Visitors Till Now</h2>
               <p className="display-6 mb-0">{totalVisitors.toLocaleString()}</p>
@@ -169,7 +170,7 @@ function About() {
           </article>
         </div>
         <div className="col-md-4">
-          <article className="card border-0 shadow-sm h-100">
+          <article className={`${styles.card} card border-0 shadow-sm h-100`}>
             <div className="card-body">
               <h2 className="h5">Live Temple Footfall</h2>
               <p className="display-6 mb-0">{liveTempleVisitors.toLocaleString()}</p>

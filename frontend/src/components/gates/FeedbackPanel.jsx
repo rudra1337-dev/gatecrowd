@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getLastFeedbackTimestamp, submitFeedback } from '../../services/feedbackService';
+import styles from '../../styles/components/gates/FeedbackPanel.module.css';
 
 // Cooldown set to 1 minute
 const WAIT_TIME_MS = 60 * 1000;
@@ -66,13 +67,13 @@ function FeedbackPanel({ gateId }) {
   };
 
   return (
-    <section className="glass-panel rounded-4 p-4" aria-label="Crowd feedback panel">
+    <section className={`${styles.panel} rounded-4 p-4`} aria-label="Crowd feedback panel">
       <h2 className="h5 mb-3">Share Current Crowd Observation</h2>
       <form onSubmit={handleSubmit} className="d-grid gap-3">
         <p className="mb-1">Select Crowd Level (Optional)</p>
         <div className="d-flex flex-wrap gap-2">
           {options.map((option) => (
-            <label key={option.value} className={`feedback-pill feedback-pill-${option.tone}`}>
+            <label key={option.value} className={`${styles.pill} ${styles[option.tone]}`}>
               <input
                 type="radio"
                 name="feedback-level"

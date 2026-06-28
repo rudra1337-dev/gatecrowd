@@ -1,0 +1,4 @@
+.page {
+  padding-top: var(--gc-space-page-y);
+  padding-bottom: var(--gc-space-page-y);
+}

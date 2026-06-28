@@ -1,0 +1,31 @@
+.card {
+  overflow: hidden;
+  background: var(--gc-surface-solid);
+}
+
+:root[data-theme='dark'] .card {
+  color: var(--gc-text);
+}
+
+.image {
+  height: 180px;
+  background: linear-gradient(90deg, #efefef 20%, #e1e1e1 50%, #efefef 80%);
+  animation: pulse 1.2s infinite linear;
+}
+
+.line {
+  height: 0.85rem;
+  border-radius: 0.25rem;
+  background: linear-gradient(90deg, #efefef 20%, #e1e1e1 50%, #efefef 80%);
+  animation: pulse 1.2s infinite linear;
+}
+
+@keyframes pulse {
+  0% {
+    background-position: -200px 0;
+  }
+
+  100% {
+    background-position: 200px 0;
+  }
+}

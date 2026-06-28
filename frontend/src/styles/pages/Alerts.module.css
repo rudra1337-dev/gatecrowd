@@ -1,0 +1,18 @@
+.page {
+  padding-top: var(--gc-space-page-y);
+  padding-bottom: var(--gc-space-page-y);
+}
+
+.card {
+  background: var(--gc-surface-solid);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+:root[data-theme='dark'] .card {
+  color: var(--gc-text);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--gc-shadow-hover) !important;
+}

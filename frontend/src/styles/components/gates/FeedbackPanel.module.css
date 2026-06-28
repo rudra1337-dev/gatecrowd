@@ -1,0 +1,56 @@
+.panel {
+  background: var(--gc-surface);
+  border: 1px solid var(--gc-border-soft);
+  box-shadow: var(--gc-shadow-panel);
+  backdrop-filter: blur(10px);
+}
+
+.pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.pill input {
+  position: absolute;
+  opacity: 0;
+}
+
+.pill span {
+  display: inline-flex;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--gc-radius-pill);
+  font-size: 0.82rem;
+  border: 1px solid transparent;
+}
+
+.success span {
+  background: #d2f4df;
+  color: #115d33;
+}
+
+.info span {
+  background: #d8f1ff;
+  color: #064b6b;
+}
+
+.warning span {
+  background: #ffeebf;
+  color: #6a4c00;
+}
+
+.danger span {
+  background: #ffd8d8;
+  color: #7b1616;
+}
+
+.dark span {
+  background: #dfdfdf;
+  color: #202020;
+}
+
+.pill input:checked + span {
+  border-color: #8a5b00;
+  transform: translateY(-1px);
+}

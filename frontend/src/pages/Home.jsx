@@ -6,6 +6,7 @@ import SkeletonCard from '../components/common/SkeletonCard';
 import { useCrowdContext } from '../context/CrowdContext';
 import SeoHead from '../seo/SeoHead';
 import { buildBreadcrumbSchema, buildProjectSchema } from '../seo/schema';
+import styles from '../styles/pages/Home.module.css';
 
 function Home() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ function Home() {
   const breadcrumbSchema = useMemo(() => buildBreadcrumbSchema([{ name: 'Home', path: '/home' }]), []);
 
   return (
-    <div className="container page-pad">
+    <div className={`${styles.page} container`}>
       <SeoHead
         title="Live Crowd Monitoring for Puri Jagannath Temple"
         path="/home"
@@ -37,7 +38,7 @@ function Home() {
         keywords="GateCrowd home, Jagannath Temple live crowd, temple gate queue status, darshan planning app"
         structuredData={[breadcrumbSchema, buildProjectSchema()]}
       />
-      <section className="hero-section glass-panel rounded-4 p-4 p-md-5 mb-5">
+      <section className={`${styles.panel} rounded-4 p-4 p-md-5 mb-5`}>
         <h1 className="display-6 fw-bold mb-3">{greeting}, Welcome to GateCrowd 🛕</h1>
         <p className="lead mb-0">
           Real-time crowd awareness for smarter, calmer temple visits at Puri Jagannath Temple.
@@ -92,8 +93,8 @@ function Home() {
           <div className="row g-4">
             {gateOverview.map((gate) => (
               <div className="col-sm-6 col-lg-3" key={gate.id}>
-                <article className="card h-100 border-0 shadow-sm gate-overview-card">
-                  <img src={gate.image} className="card-img-top gate-img" alt={`${gate.name} view`} loading="lazy" />
+                <article className={`${styles.card} card h-100 border-0 shadow-sm`}>
+                  <img src={gate.image} className={`${styles.gateImage} card-img-top`} alt={`${gate.name} view`} loading="lazy" />
                   <div className="card-body">
                     <h3 className="h5">{gate.name}</h3>
                     <p>{gate.description}</p>
@@ -102,7 +103,7 @@ function Home() {
                     </div>
                     <button
                       type="button"
-                      className="btn btn-warning btn-sm btn-3d"
+                      className={`${styles.button3d} btn btn-warning btn-sm`}
                       onClick={() => {
                         navigate('/gates');
                         window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import styles from '../../styles/components/common/ThreeBackground.module.css';
 
 function ThreeBackground() {
   const mountRef = useRef(null);
@@ -76,7 +77,7 @@ function ThreeBackground() {
     };
   }, []);
 
-  return <div ref={mountRef} className="three-bg" aria-hidden="true" />;
+  return <div ref={mountRef} className={styles.background} aria-hidden="true" />;
 }
 
 export default ThreeBackground;

@@ -1,0 +1,19 @@
+.wrapper {
+  background: var(--gc-surface);
+  border: 1px solid var(--gc-border-soft);
+  box-shadow: var(--gc-shadow-panel);
+  backdrop-filter: blur(10px);
+}
+
+.chartFrame {
+  height: 360px;
+  border: 1px solid var(--gc-border-muted);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.35);
+  padding: 0.5rem;
+  position: relative;
+}
+
+:root[data-theme='dark'] .chartFrame {
+  background: rgba(30, 30, 30, 0.35);
+}

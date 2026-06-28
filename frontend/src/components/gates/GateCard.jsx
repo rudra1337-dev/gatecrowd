@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Badge from '../common/Badge';
 import CrowdHeatIndicator from '../common/CrowdHeatIndicator';
+import styles from '../../styles/components/gates/GateCard.module.css';
 
 function GateCard({ gate, isBestGate = false }) {
   const navigate = useNavigate();
@@ -8,7 +9,7 @@ function GateCard({ gate, isBestGate = false }) {
 
   return (
     <article
-      className="card gate-card border-0 shadow-sm h-100"
+      className={`${styles.card} card border-0 shadow-sm h-100`}
       onClick={openDetails}
       onKeyDown={(event) => {
         if (event.key === 'Enter' || event.key === ' ') {
@@ -19,7 +20,7 @@ function GateCard({ gate, isBestGate = false }) {
       tabIndex={0}
       aria-label={`View details for ${gate.name}`}
     >
-      <img src={gate.image} className="card-img-top gate-img" alt={`${gate.name} entrance view`} loading="lazy" />
+      <img src={gate.image} className={`${styles.image} card-img-top`} alt={`${gate.name} entrance view`} loading="lazy" />
       <div className="card-body d-flex flex-column">
         <div className="d-flex justify-content-between align-items-start gap-2 mb-2">
           <h2 className="h5 mb-0">{gate.name}</h2>

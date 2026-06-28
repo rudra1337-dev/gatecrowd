@@ -5,6 +5,7 @@ import { getAlertsFromGates } from '../services/alertService';
 import { connect, disconnect, subscribe } from '../services/socketService';
 import SeoHead from '../seo/SeoHead';
 import { buildBreadcrumbSchema } from '../seo/schema';
+import styles from '../styles/pages/Alerts.module.css';
 
 function priorityTone(priority) {
   if (priority === 'High') {
@@ -77,7 +78,7 @@ function Alerts() {
   );
 
   return (
-    <div className="container page-pad">
+    <div className={`${styles.page} container`}>
       <SeoHead
         title="Live Crowd Alerts and Recommendations"
         path="/alerts"
@@ -93,7 +94,7 @@ function Alerts() {
       <div className="row g-4">
         {alerts.map((alert) => (
           <div className="col-md-6" key={alert.id}>
-            <article className={`card border shadow-sm h-100 alert-card ${priorityCardClass(alert.priority)}`}>
+            <article className={`${styles.card} card border shadow-sm h-100 ${priorityCardClass(alert.priority)}`}>
               <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center mb-2">
                   <h2 className="h5 mb-0">{alert.gateName}</h2>

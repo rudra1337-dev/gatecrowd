@@ -1,6 +1,8 @@
+import styles from '../../styles/components/layout/Footer.module.css';
+
 function Footer() {
   return (
-    <footer className="footer-section mt-auto py-4">
+    <footer className={`${styles.footer} mt-auto py-4`}>
       <div className="container">
         <div className="row g-4">
           <div className="col-md-4">

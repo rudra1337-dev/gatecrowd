@@ -5,6 +5,7 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 import SkeletonCard from '../components/common/SkeletonCard';
 import SeoHead from '../seo/SeoHead';
 import { buildBreadcrumbSchema } from '../seo/schema';
+import styles from '../styles/pages/Gates.module.css';
 
 function Gates() {
   const { gates, loading, error, refreshGates, bestGate } = useCrowdContext();
@@ -32,7 +33,7 @@ function Gates() {
   );
 
   return (
-    <div className="container page-pad">
+    <div className={`${styles.page} container`}>
       <SeoHead
         title="Temple Gates Live Status"
         path="/gates"

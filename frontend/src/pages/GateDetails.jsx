@@ -9,6 +9,7 @@ import { useCrowdContext } from '../context/CrowdContext';
 import { connect, disconnect, emit, subscribe } from '../services/socketService';
 import SeoHead from '../seo/SeoHead';
 import { buildBreadcrumbSchema } from '../seo/schema';
+import styles from '../styles/pages/GateDetails.module.css';
 
 function GateDetails() {
   const { id } = useParams();
@@ -68,7 +69,7 @@ function GateDetails() {
 
   if (!gate) {
     return (
-      <div className="container page-pad">
+      <div className={`${styles.page} container`}>
         <div className="alert alert-warning">Gate not found. Please return to the gates list.</div>
         <Link to="/gates" className="btn btn-warning">
           Back to Gates
@@ -78,7 +79,7 @@ function GateDetails() {
   }
 
   return (
-    <div className="container page-pad">
+    <div className={`${styles.page} container`}>
       <SeoHead
         title={gate ? `${gate.name} Live Crowd Details` : 'Gate Details'}
         path={`/gates/${id}`}
@@ -93,12 +94,12 @@ function GateDetails() {
         structuredData={gateSchema ? [breadcrumbSchema, gateSchema] : [breadcrumbSchema]}
       />
       <section className="mb-4">
-        <img src={gate.image} alt={`${gate.name} detailed view`} className="img-fluid rounded-4 shadow-sm w-100 details-hero" />
+        <img src={gate.image} alt={`${gate.name} detailed view`} className={`${styles.heroImage} img-fluid rounded-4 shadow-sm w-100`} />
       </section>
 
       <section className="row g-4 mb-4">
         <div className="col-lg-7">
-          <div className="glass-panel rounded-4 p-4 h-100">
+          <div className={`${styles.panel} rounded-4 p-4 h-100`}>
             <h1 className="h2 mb-3">{gate.name}</h1>
             <p>{gate.detail}</p>
             <ul className="list-group list-group-flush">

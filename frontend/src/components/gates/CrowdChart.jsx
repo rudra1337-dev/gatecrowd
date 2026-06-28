@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { AgCharts } from 'ag-charts-react';
 import 'ag-charts-enterprise';
+import styles from '../../styles/components/gates/CrowdChart.module.css';
 
 function rangeBounds(peopleRange = '31-60') {
   if (peopleRange.includes('+')) {
@@ -119,7 +120,7 @@ function CrowdChart({ history }) {
   );
 
   return (
-    <section className="crowd-chart-wrapper glass-panel p-3 rounded-4" aria-label="Live crowd range over time chart">
+    <section className={`${styles.wrapper} p-3 rounded-4`} aria-label="Live crowd range over time chart">
       <div className="d-flex align-items-center justify-content-between mb-3">
         <h2 className="h5 mb-0">People Range vs Time</h2>
         <div className="d-flex gap-2 align-items-center">
@@ -137,7 +138,7 @@ function CrowdChart({ history }) {
         </div>
       </div>
 
-      <div className="trade-graph-wrap" style={{ height: 360 }}>
+      <div className={styles.chartFrame}>
         <AgCharts options={options} />
       </div>
     </section>
