@@ -2,11 +2,11 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import connectDB from "./src/config/db.js";
-import dotenv from "dotenv";
 
 import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
+import { FRONTEND_URL, GEMINI_API_KEY, GEMINI_MODEL, PORT } from "./src/constants/env.js";
 
 import appRoutes from "./src/app.js"; // your existing express app
 import {
@@ -16,9 +16,10 @@ import {
 import { GATE_IDS } from "./src/constants/gates.js";
 import { setIO } from "./src/utils/socket.js";
 
-dotenv.config();
-
-const PORT = process.env.PORT || 5000;
+if (!GEMINI_API_KEY || !GEMINI_MODEL) {
+    console.error("[FATAL] GEMINI_API_KEY and GEMINI_MODEL must be set in .env");
+    process.exit(1);
+}
 
 // --- CREATE EXPRESS APP ---
 const app = express();
@@ -26,8 +27,10 @@ const app = express();
 // --- Security Middlewares ---
 app.use(helmet()); // secure headers
 app.use(cors({
-    origin: "*", // 🔒 Replace '*' with frontend URL in production
-    methods: ["GET", "POST"]
+    origin: FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
 }));
 
 // Rate limiter
@@ -50,8 +53,10 @@ const server = createServer(app);
 // --- SOCKET.IO SETUP ---
 export const io = new Server(server, {
     cors: {
-        origin: "*", // 🔒 Replace '*' with frontend URL in production
-        methods: ["GET", "POST"]
+        origin: FRONTEND_URL,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true
     }
 });
 

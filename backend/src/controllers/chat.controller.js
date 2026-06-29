@@ -1,11 +1,4 @@
-const simulatedReplies = {
-  crowd: "Current crowd density is within safe limits. Zone B is at 78% capacity.",
-  gate: "Gate 2 and Gate 4 are currently open. Gate 1 closes at 9 PM.",
-  occupancy: "Total venue occupancy is at 62%. Peak expected around 8:30 PM.",
-  alert: "No active alerts at this time. All zones are operating normally.",
-  safety: "Emergency exits are clear. Security personnel are stationed at all entry points.",
-  default: "I'm analyzing your query. For real-time data, ensure your venue sensors are connected."
-};
+import { getGeminiResponse } from "../services/geminiService.js";
 
 export async function postChatMessage(req, res) {
   try {
@@ -15,19 +8,24 @@ export async function postChatMessage(req, res) {
       return res.status(400).json({ error: "message is required" });
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    const normalizedMessage = message.toLowerCase();
-    const matchedKeyword = Object.keys(simulatedReplies).find(
-      (keyword) => keyword !== "default" && normalizedMessage.includes(keyword)
-    );
-    const reply = simulatedReplies[matchedKeyword] ?? simulatedReplies.default;
+    const reply = await getGeminiResponse(message.trim());
 
     return res.status(200).json({
       reply,
       timestamp: new Date().toISOString()
     });
-  } catch {
-    return res.status(500).json({ error: "Something went wrong" });
+  } catch (error) {
+    console.error("[Chat Controller Error]", error.message);
+    const errorMessage = error.message?.toLowerCase() ?? "";
+
+    if (errorMessage.includes("api_key") || errorMessage.includes("api key") || errorMessage.includes("403")) {
+      return res.status(500).json({ error: "AI service authentication failed" });
+    }
+
+    if (errorMessage.includes("quota") || errorMessage.includes("429")) {
+      return res.status(429).json({ error: "AI service rate limit reached. Please try again shortly." });
+    }
+
+    return res.status(500).json({ error: "Something went wrong. Please try again." });
   }
 }

@@ -12,6 +12,7 @@
   "author": "rudra1337-dev",
   "license": "ISC",
   "dependencies": {
+    "@google/genai": "^2.10.0",
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
