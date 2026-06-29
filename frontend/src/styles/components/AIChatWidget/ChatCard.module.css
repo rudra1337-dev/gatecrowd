@@ -8,8 +8,9 @@
   height: var(--chat-card-height);
   max-height: calc(100vh - 120px);
   flex-direction: column;
-  border: 1px solid rgba(17, 24, 39, 0.08);
+  border: 1px solid var(--chat-border);
   border-radius: var(--chat-card-radius);
+  background: var(--chat-bg);
   box-shadow: var(--shadow-card);
   transform-origin: bottom right;
 }

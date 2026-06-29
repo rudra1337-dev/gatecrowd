@@ -18,7 +18,7 @@
   width: 7px;
   height: 7px;
   border-radius: 999px;
-  background: #9ca3af;
+  background: var(--typing-dot-color);
   animation: bounce 1.2s infinite ease-in-out;
 }
 
@@ -36,7 +36,7 @@
 
 .thinkingText {
   margin-top: 4px;
-  color: #9ca3af;
+  color: var(--thinking-text-color);
   font-size: 0.68rem;
   font-style: italic;
 }

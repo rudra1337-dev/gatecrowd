@@ -33,14 +33,21 @@
 }
 
 .bubbleError {
-  color: #dc2626;
-  background: #fef2f2;
+  color: var(--error-bubble-text);
+  background: var(--error-bubble-bg);
 }
 
 .timestamp {
   margin-top: 4px;
   font-size: 0.65rem;
-  opacity: 0.55;
+}
+
+.bubble.user .timestamp {
+  color: var(--bubble-user-timestamp);
+}
+
+.bubble.ai .timestamp {
+  color: var(--bubble-ai-timestamp);
 }
 
 @keyframes fadeInUp {

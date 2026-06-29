@@ -2,16 +2,18 @@
   min-height: var(--chat-input-height);
   flex-shrink: 0;
   padding: 10px 12px;
-  border-top: 1px solid #e5e7eb;
-  background: #ffffff;
+  border-top: 1px solid var(--chat-border);
+  background: var(--chat-bg);
 }
 
 .textarea {
   max-height: 80px;
   flex: 1;
   resize: none;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--chat-input-border);
   border-radius: 22px;
+  background: var(--chat-input-bg);
+  color: var(--chat-input-text);
   padding: 10px 16px;
   font-size: 0.875rem;
   line-height: 1.4;
@@ -26,8 +28,12 @@
 }
 
 .textarea:disabled {
-  background: #f9fafb;
+  background: var(--chat-input-disabled-bg);
   cursor: not-allowed;
+}
+
+.textarea::placeholder {
+  color: var(--chat-input-placeholder);
 }
 
 .sendBtn {
@@ -53,6 +59,6 @@
 }
 
 .sendBtn:disabled {
-  background: #93c5fd;
+  background: var(--send-disabled-bg);
   cursor: not-allowed;
 }

@@ -7,9 +7,9 @@
 .avatar {
   width: 36px;
   height: 36px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid var(--chat-header-avatar-border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.96);
+  background: var(--chat-header-avatar-bg);
   color: var(--gc-primary-dark);
   font-size: 0.72rem;
   font-weight: 800;
@@ -44,7 +44,7 @@
   padding: 0;
   border: 0;
   border-radius: 999px;
-  color: #ffffff;
+  color: var(--chat-header-close-text);
   background: transparent;
   font-size: 1.1rem;
   line-height: 1;
@@ -53,6 +53,6 @@
 
 .closeBtn:hover,
 .closeBtn:focus-visible {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.15);
+  color: var(--chat-header-close-text);
+  background: var(--header-close-hover);
 }

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import ChatHeader from './ChatHeader';
 import ChatMessageList from './ChatMessageList';
 import ChatInputBar from './ChatInputBar';
-import { fetchAIResponse } from '../../services/mockAI';
+import { fetchAIResponse } from '../../services/chatService';
 import styles from '../../styles/components/AIChatWidget/ChatCard.module.css';
 
 const welcomeMessage = {
@@ -70,7 +70,7 @@ function ChatCard({ isOpen, onClose, fabRef }) {
   return (
     <section
       ref={cardRef}
-      className={`${styles.card} ${isOpen ? styles.cardOpen : styles.cardClose} bg-white overflow-hidden`}
+      className={`${styles.card} ${isOpen ? styles.cardOpen : styles.cardClose} overflow-hidden`}
       aria-label="GateCrowd AI Assistant"
     >
       <ChatHeader onClose={onClose} />
