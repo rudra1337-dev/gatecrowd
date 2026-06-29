@@ -1,4 +1,3 @@
-import { API_BASE_URL } from './apiConfig';
 import { http } from './httpClient';
 
 const CACHE_KEY = 'gatecrowd_gate_cache_v2';
@@ -117,7 +116,7 @@ function saveCache(data) {
 }
 
 export async function getGateCrowd(gateId) {
-  const crowdData = await fetchJson(`/api/crowd/${gateId}`);
+  const crowdData = await fetchJson(`/crowd/${gateId}`);
   return {
     crowdLevel: crowdRangeToValue[crowdData?.peopleRange] || 45,
     crowdLabel: crowdData?.crowdLevel || 'MODERATE',
@@ -133,12 +132,12 @@ export async function getGates(forceRefresh = false) {
     }
   }
 
-  const gates = await fetchJson('/api/gates');
+  const gates = await fetchJson('/gates');
 
   const normalizedGates = await Promise.all(
     gates.map(async (gate) => {
       try {
-        const crowdData = await fetchJson(`/api/crowd/${gate._id}`);
+        const crowdData = await fetchJson(`/crowd/${gate._id}`);
         return normalizeGate(gate, crowdData);
       } catch {
         return normalizeGate(gate, { crowdLevel: 'MODERATE', peopleRange: '31-60' });
@@ -149,5 +148,3 @@ export async function getGates(forceRefresh = false) {
   saveCache(normalizedGates);
   return normalizedGates;
 }
-
-export { API_BASE_URL };

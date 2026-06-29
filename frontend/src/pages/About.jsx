@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { API_BASE_URL } from '../services/apiConfig';
+import { API_BASE_URL } from '../services/httpClient';
 import { useCrowdContext } from '../context/CrowdContext';
 import SeoHead from '../seo/SeoHead';
 import { buildBreadcrumbSchema, buildProjectSchema } from '../seo/schema';

@@ -35,7 +35,7 @@ export function getLastFeedbackTimestamp(gateId) {
 export async function submitFeedback({ gateId, levelLabel }) {
   const mapped = labelToPayload[levelLabel] || labelToPayload.MODERATE;
 
-  const response = await http.post('/api/feedback', {
+  const response = await http.post('/feedback', {
     gateId,
     crowdLevel: mapped.crowdLevel,
     peopleRange: mapped.peopleRange

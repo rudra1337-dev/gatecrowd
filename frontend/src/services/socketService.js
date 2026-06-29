@@ -1,5 +1,7 @@
 import { io } from 'socket.io-client';
-import { API_BASE_URL } from './apiConfig';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const SOCKET_BASE_URL = API_BASE_URL.replace(/\/api\/?$/, '');
 
 let socket;
 
@@ -8,7 +10,7 @@ function ensureSocket() {
     return socket;
   }
 
-  socket = io(API_BASE_URL, {
+  socket = io(SOCKET_BASE_URL, {
     transports: ['websocket', 'polling'],
     autoConnect: true,
     reconnection: true,
